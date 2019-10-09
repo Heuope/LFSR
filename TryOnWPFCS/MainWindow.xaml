@@ -1,0 +1,56 @@
+﻿<Window x:Class="TryOnWPFCS.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TryOnWPFCS"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid x:Name="FirstLayout" Background="White">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition MaxHeight="25"/>
+            <RowDefinition/>
+            <RowDefinition MaxHeight="170"/>
+        </Grid.RowDefinitions>
+
+        <ToolBar Height="25"  Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3">
+            <Button Content="Load" Click="Load_Button_Click"/>
+            <Separator/>
+            <Button Content="Save" Click="Save_Button_Click" VerticalAlignment="Stretch"/>
+        </ToolBar>
+        
+        <GroupBox Grid.Row="1" Grid.Column="0" Header="Original File" FontSize="14">
+            <TextBlock x:Name="StartBits" FontSize="14" TextWrapping="Wrap"/>
+        </GroupBox>
+        <GroupBox Grid.Row="1" Grid.Column="1" Header="Key" FontSize="14">
+            <TextBlock x:Name="KeyBits" FontSize="14" TextWrapping="Wrap"/>
+        </GroupBox>
+        <GroupBox Grid.Row="1" Grid.Column="2" Header="Cipher File" FontSize="14">
+            <TextBlock x:Name="FinishBits" FontSize="14" TextWrapping="Wrap"/>
+        </GroupBox>
+
+        <TabControl Grid.Row="2" Grid.Column="1" FontSize="14">
+            <TabItem Header="LFSR" MinWidth="60">
+                <StackPanel>
+                    <TextBox TextChanged="text_box_LFSR_TextChanged" TextWrapping="Wrap" MaxLength="29" x:Name="LFSR_Key"/>
+                    <Button Content="Start" MinHeight="30" MinWidth="100" Margin="0 10 0 0" HorizontalAlignment="Center" Click="Button_Click_LFSR"/>
+                </StackPanel>
+            </TabItem>
+            
+            <TabItem Header="Geffe" MinWidth="60">
+                <StackPanel>
+                    <TextBox Name="First" TextWrapping="Wrap" Margin="0 0 0 10" MaxLength="29" TextChanged="text_box_LFSR_TextChanged"/>
+                    <TextBox Name="Second" TextWrapping="Wrap" MaxLength="29" TextChanged="text_box_LFSR_TextChanged"/>
+                    <TextBox Name="Third" TextWrapping="Wrap" Margin="0 10 0 0" MaxLength="29" TextChanged="text_box_LFSR_TextChanged"/>
+                    <Button Content="Start" MinHeight="30" MinWidth="100" Margin="0 10 0 0" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+        
+    </Grid>
+</Window>
