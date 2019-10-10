@@ -17,46 +17,49 @@ namespace TryOnWPFCS
         public static void MainPoint(string _key, string _filePathLoad, string _filePathSave)
         {
             InitialFile = System.IO.File.ReadAllBytes(_filePathLoad);
-            KeyGenerator(_key);
+            KeyGenerator(_key);            
             GenerateCipher();
             System.IO.File.WriteAllBytes(_filePathSave, CipherFile);
         }
 
-        static private void KeyGenerator(string keyStream)
-        {
-            var _key = new byte[InitialFile.Length];
+        private static void KeyGenerator(string keyStream)
+        {        
+            var _key = new List<byte>();
 
-            //
-            // TODO create block for small files without using generator 
-            //
+            var _elementLFSR = new byte[keyStream.Length]; // LFSR element
 
-            var _keyStream = new byte[keyStream.Length];
+            // initialize element                        
 
             for (int i = 0; i < keyStream.Length; i++)
-                _keyStream[i] = byte.Parse(keyStream[i].ToString());
+                _elementLFSR[i] = byte.Parse(keyStream[i].ToString());
 
-            string _bitsKey = "";
-            int _lastNumber;
-            int k = 0; // index in _key
+            int _lastNumber;          
+            int z = 0; // counter bit in byte
+            byte _byteInKey = 0;            
 
             for (Int64 i = 0; i < InitialFile.Length * BitInByte; i++)
-            {
-                _bitsKey += _keyStream[0].ToString();
-                if (_bitsKey.Length == 8)
-                {
-                    _key[k++] = Convert.ToByte(_bitsKey, 2);
-                    _bitsKey = "";
-                }                   
-                _lastNumber = _keyStream[0] ^ _keyStream[27];
+            {                
+                _byteInKey = (byte)(_byteInKey << 1);
+                _byteInKey = (byte)(_byteInKey & 0b_1111_1110);
+                _byteInKey = (byte)(_byteInKey | _elementLFSR[0]);
 
-                for (int j = 0; j < _keyStream.Length - 1; j++)
-                    _keyStream[j] = _keyStream[j + 1];
-                
-                _keyStream[_keyStream.Length - 1] = (byte)_lastNumber;
+                z++;
+                if (z == 8)
+                {
+                    _key.Add(_byteInKey);                   
+                    z = 0;
+                }
+
+                _lastNumber = _elementLFSR[0] ^ _elementLFSR[27];
+
+                for (int j = 0; j < _elementLFSR.Length - 1; j++)
+                    _elementLFSR[j] = _elementLFSR[j + 1];
+
+                _elementLFSR[_elementLFSR.Length - 1] = (byte)_lastNumber;
             }
 
-            Key = _key;
-        }
+            Key = _key.ToArray();
+        }      
 
         static private void GenerateCipher()
         {
