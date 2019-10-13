@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TryOnWPFCS"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="670" Width="800">
     <Grid x:Name="FirstLayout" Background="White">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -15,47 +15,101 @@
         <Grid.RowDefinitions>
             <RowDefinition MaxHeight="25"/>
             <RowDefinition/>
-            <RowDefinition MaxHeight="170"/>
+            <RowDefinition MaxHeight="230"/>
         </Grid.RowDefinitions>
 
-        <InkCanvas Grid.Column="0" Grid.Row="2" Background="Azure"/>
+        <InkCanvas Grid.Column="0"
+                   Grid.Row="2"
+                   Background="Azure"/>
 
         <ToolBar Height="25"  Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3">
-            <Button Content="Load" Click="Load_Button_Click"/>
+            <Button Content="Load"
+                    Click="Load_Button_Click"/>
+            
             <Separator/>
-            <Button Content="Save" Click="Save_Button_Click" VerticalAlignment="Stretch"/>
+            
+            <Button Content="Save"
+                    Click="Save_Button_Click"/>
         </ToolBar>
         
         <GroupBox Grid.Row="1" Grid.Column="0" Header="Original File" FontSize="14">
             <ScrollViewer>
-                <TextBlock x:Name="InitialFileBits" FontSize="14" TextWrapping="Wrap" ScrollViewer.HorizontalScrollBarVisibility="Visible"/>
+                <TextBlock x:Name="InitialFileBits"
+                           FontSize="14"
+                           TextWrapping="Wrap"/>
             </ScrollViewer>
         </GroupBox>
+        
         <GroupBox Grid.Row="1" Grid.Column="1" Header="Key" FontSize="14">
             <ScrollViewer>
-                <TextBlock x:Name="KeyBits" FontSize="14" TextWrapping="Wrap"/>
+                <TextBlock x:Name="KeyBits"
+                           FontSize="14"
+                           TextWrapping="Wrap"/>
             </ScrollViewer>
         </GroupBox>
+        
         <GroupBox Grid.Row="1" Grid.Column="2" Header="Cipher File" FontSize="14">
             <ScrollViewer>
-                <TextBlock x:Name="CipherFileBits" FontSize="14" TextWrapping="Wrap"/>
+                <TextBlock x:Name="CipherFileBits"
+                           FontSize="14"
+                           TextWrapping="Wrap"/>
             </ScrollViewer>
         </GroupBox>
 
         <TabControl Grid.Row="2" Grid.Column="1" FontSize="14">
             <TabItem Header="LFSR" MinWidth="60">
                 <StackPanel>
-                    <TextBox TextChanged="text_box_LFSR_TextChanged" TextWrapping="Wrap" MaxLength="29" x:Name="LFSRKey"/>
-                    <Button Content="Start" MinHeight="30" MinWidth="100" Margin="0 10 0 0" HorizontalAlignment="Center" Click="Button_Click_LFSR"/>
+                    <TextBlock Text="x^29 + x^2 + 1 :"
+                               Margin="5 0 0 2"/>
+                    
+                    <TextBox TextChanged="text_box_LFSR_TextChanged"
+                             TextWrapping="Wrap"
+                             MaxLength="29"
+                             x:Name="LFSRKey"/>
+
+                    <Button Content="Start"
+                            MinHeight="30"
+                            MinWidth="100"
+                            Margin="0 10 0 0"
+                            HorizontalAlignment="Center"
+                            Click="Button_Click_LFSR"/>
                 </StackPanel>
             </TabItem>
             
             <TabItem Header="Geffe" MinWidth="60">
                 <StackPanel>
-                    <TextBox Name="FirstKeyStream" TextWrapping="Wrap" Margin="0 0 0 10" MaxLength="29" TextChanged="text_box_LFSR_TextChanged"/>
-                    <TextBox Name="SecondKeyStream" TextWrapping="Wrap" MaxLength="27" TextChanged="text_box_LFSR_TextChanged"/>
-                    <TextBox Name="ThirdKeyStream" TextWrapping="Wrap" Margin="0 10 0 0" MaxLength="37" TextChanged="text_box_LFSR_TextChanged"/>
-                    <Button Content="Start" MinHeight="30" MinWidth="100" Margin="0 10 0 0" HorizontalAlignment="Center" Click="Button_Click"/>
+                    <TextBlock Text="x^29 + x^2 + 1 :"
+                               Margin="5 0 0 2"/>
+                    
+                    <TextBox Name="FirstKeyStream" 
+                             TextWrapping="Wrap"
+                             Margin="0 0 0 5"
+                             MaxLength="29"
+                             TextChanged="text_box_LFSR_TextChanged"/>
+
+                    <TextBlock Text="x^27 + x^8 + x^7 + x + 1 :" 
+                               Margin="5 0 0 2"/>
+                    
+                    <TextBox Name="SecondKeyStream"
+                             TextWrapping="Wrap"
+                             MaxLength="27"
+                             TextChanged="text_box_LFSR_TextChanged"
+                             Margin="0 0 0 5"/>
+
+                    <TextBlock Text="x^37 + x^12 + x^10 + x^2 + 1 :"
+                               Margin="5 0 0 2"/>
+                    
+                    <TextBox Name="ThirdKeyStream"
+                             TextWrapping="Wrap"
+                             MaxLength="37"
+                             TextChanged="text_box_LFSR_TextChanged"/>
+
+                    <Button Content="Start"
+                            MinHeight="30"
+                            MinWidth="100"
+                            Margin="0 10 0 0"
+                            HorizontalAlignment="Center"
+                            Click="Button_Click"/>
                 </StackPanel>
             </TabItem>
         </TabControl>
