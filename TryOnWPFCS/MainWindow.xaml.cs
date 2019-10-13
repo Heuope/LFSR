@@ -54,6 +54,7 @@ namespace TryOnWPFCS
         private string GetBits(byte[] bytes)
         {
             string bits = "";
+
             for (int i = 0; (i < MaxBytes) && (i < bytes.Length); i++)
             {
                 string temp = Convert.ToString(bytes[i], 2);
@@ -61,6 +62,7 @@ namespace TryOnWPFCS
                     temp = '0' + temp;
                 bits += temp;
             }
+
             return bits;
         }
 
@@ -75,6 +77,9 @@ namespace TryOnWPFCS
 
         private void Button_Click_LFSR(object sender, RoutedEventArgs e)
         {
+            if ((SaveFilePath == null) || (LoadFilePath == null))
+                return;
+
             var lfsr = new LFSR();
 
             lfsr.Start(LFSRKey.Text, LoadFilePath);
@@ -85,6 +90,9 @@ namespace TryOnWPFCS
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            if ((SaveFilePath == null) || (LoadFilePath == null))
+                return;
+
             var geffe = new Geffe();
             geffe.Start(FirstKeyStream.Text, SecondKeyStream.Text, ThirdKeyStream.Text, LoadFilePath);
             geffe.SaveFile(SaveFilePath);

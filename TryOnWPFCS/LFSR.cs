@@ -11,7 +11,7 @@ namespace TryOnWPFCS
 
         private const int BitInByte = 8;
 
-        public virtual void Start(string key, string loadFilePath)
+        public void Start(string key, string loadFilePath)
         {            
             InitialFile = System.IO.File.ReadAllBytes(loadFilePath);
             Key =  KeyGenerator(key, InitialFile.Length, new int[] { 27 });            
