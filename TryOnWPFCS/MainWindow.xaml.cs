@@ -1,17 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace TryOnWPFCS
 {
@@ -22,7 +11,7 @@ namespace TryOnWPFCS
     {
         private string LoadFilePath;
         private string SaveFilePath;
-        private int MaxBytes = 200;
+        private const int MaxBytes = 200;
 
         public MainWindow()
         {
@@ -31,22 +20,20 @@ namespace TryOnWPFCS
 
         private void text_box_LFSR_TextChanged(object sender, TextChangedEventArgs e)
         {            
-            var _text = (TextBox)sender;
-            string _str = "";
-            int _temp = _text.CaretIndex;
+            var textBox = (TextBox)sender;
+            string str = "";
+            int caretIndex = textBox.CaretIndex;
 
-            foreach (var item in _text.Text)
+            foreach (char item in textBox.Text)
                 if (item == '1' || item == '0')
-                    _str += item;
+                    str += item;
 
-            _text.Text = _str;
-            _text.CaretIndex = _temp;
+            textBox.Text = str;
+            textBox.CaretIndex = caretIndex;
         }
         private void Load_Button_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new Microsoft.Win32.OpenFileDialog();
-            dialog.Filter = "Text documents (*.txt)|*.txt|All files (*.*)|*.*";
-            dialog.FilterIndex = 2;
+            var dialog = new Microsoft.Win32.OpenFileDialog();          
 
             Nullable<bool> result = dialog.ShowDialog();
 
@@ -64,78 +51,45 @@ namespace TryOnWPFCS
                 SaveFilePath = dialog.FileName;
         }
 
+        private string GetBits(byte[] bytes)
+        {
+            string bits = "";
+            for (int i = 0; (i < MaxBytes) && (i < bytes.Length); i++)
+            {
+                string temp = Convert.ToString(bytes[i], 2);
+                while (temp.Length < 8)
+                    temp = '0' + temp;
+                bits += temp;
+            }
+            return bits;
+        }
+
+        private void PrintBits(object obj)
+        {
+            var lfsr = (LFSR)obj;
+
+            InitialFileBits.Text = GetBits(lfsr.InitialFile);
+            KeyBits.Text = GetBits(lfsr.Key);
+            CipherFileBits.Text = GetBits(lfsr.CipherFile);
+        }
+
         private void Button_Click_LFSR(object sender, RoutedEventArgs e)
         {
-            LFSR.Start(LFSR_Key.Text, LoadFilePath);
-            LFSR.SaveFile(SaveFilePath);
+            var lfsr = new LFSR();
 
-            StartBits.Text = "";
-            KeyBits.Text = "";
-            FinishBits.Text = "";
+            lfsr.Start(LFSRKey.Text, LoadFilePath);
+            lfsr.SaveFile(SaveFilePath);
 
-            string temp;
-            for (int i = 0; (i < MaxBytes) && (i < LFSR.InitialFile.Length); i++)
-            {
-                temp = Convert.ToString(LFSR.InitialFile[i], 2);
-                while (temp.Length < 8)
-                    temp = '0' + temp;
-                StartBits.Text += temp;
-            }
-            
-
-            for (int i = 0; (i < MaxBytes) && (i < LFSR.Key.Length); i++)
-            {
-                temp = Convert.ToString(LFSR.Key[i], 2);
-                while (temp.Length < 8)
-                    temp = '0' + temp;
-                KeyBits.Text += temp;
-            }
-
-            for (int i = 0; (i < MaxBytes) && (i < LFSR.CipherFile.Length); i++)
-            {
-                temp = Convert.ToString(LFSR.CipherFile[i], 2);
-                while (temp.Length < 8)
-                    temp = '0' + temp;
-                FinishBits.Text += temp;
-            }
-        }
+            PrintBits(lfsr);          
+        }        
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Geffe.Start(First.Text, Second.Text, Third.Text, LoadFilePath);
-            Geffe.SaveFile(SaveFilePath);
+            var geffe = new Geffe();
+            geffe.Start(FirstKeyStream.Text, SecondKeyStream.Text, ThirdKeyStream.Text, LoadFilePath);
+            geffe.SaveFile(SaveFilePath);
 
-            StartBits.Text = "";
-            KeyBits.Text = "";
-            FinishBits.Text = "";
-
-
-            string temp = "";
-            for (int i = 0; (i < MaxBytes) && (i < Geffe.InitialFile.Length); i++)
-            {
-                temp = Convert.ToString(Geffe.InitialFile[i], 2);
-                while (temp.Length < 8)
-                    temp = '0' + temp;
-                StartBits.Text += temp;
-            }           
-
-            for (int i = 0; (i < MaxBytes) && (i < Geffe.Key.Length); i++)
-            {
-                temp = Convert.ToString(Geffe.Key[i], 2);
-                while (temp.Length < 8)
-                    temp = '0' + temp;
-                KeyBits.Text += temp;
-            }
-
-            for (int i = 0; (i < MaxBytes) && (i < Geffe.CipherFile.Length); i++)
-            {
-                temp = Convert.ToString(Geffe.CipherFile[i], 2);
-                while (temp.Length < 8)
-                    temp = '0' + temp;
-                FinishBits.Text += temp;
-            }
-        }
-
-       
+            PrintBits(geffe);
+        }       
     }
 }
