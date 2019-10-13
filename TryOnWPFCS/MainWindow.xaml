@@ -18,6 +18,8 @@
             <RowDefinition MaxHeight="170"/>
         </Grid.RowDefinitions>
 
+        <InkCanvas Grid.Column="0" Grid.Row="2" Background="Azure"/>
+
         <ToolBar Height="25"  Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3">
             <Button Content="Load" Click="Load_Button_Click"/>
             <Separator/>
@@ -25,13 +27,19 @@
         </ToolBar>
         
         <GroupBox Grid.Row="1" Grid.Column="0" Header="Original File" FontSize="14">
-            <TextBlock x:Name="StartBits" FontSize="14" TextWrapping="Wrap"/>
+            <ScrollViewer>
+                <TextBlock x:Name="StartBits" FontSize="14" TextWrapping="Wrap" ScrollViewer.HorizontalScrollBarVisibility="Visible"/>
+            </ScrollViewer>
         </GroupBox>
         <GroupBox Grid.Row="1" Grid.Column="1" Header="Key" FontSize="14">
-            <TextBlock x:Name="KeyBits" FontSize="14" TextWrapping="Wrap"/>
+            <ScrollViewer>
+                <TextBlock x:Name="KeyBits" FontSize="14" TextWrapping="Wrap"/>
+            </ScrollViewer>
         </GroupBox>
         <GroupBox Grid.Row="1" Grid.Column="2" Header="Cipher File" FontSize="14">
-            <TextBlock x:Name="FinishBits" FontSize="14" TextWrapping="Wrap"/>
+            <ScrollViewer>
+                <TextBlock x:Name="FinishBits" FontSize="14" TextWrapping="Wrap"/>
+            </ScrollViewer>
         </GroupBox>
 
         <TabControl Grid.Row="2" Grid.Column="1" FontSize="14">
@@ -45,9 +53,9 @@
             <TabItem Header="Geffe" MinWidth="60">
                 <StackPanel>
                     <TextBox Name="First" TextWrapping="Wrap" Margin="0 0 0 10" MaxLength="29" TextChanged="text_box_LFSR_TextChanged"/>
-                    <TextBox Name="Second" TextWrapping="Wrap" MaxLength="29" TextChanged="text_box_LFSR_TextChanged"/>
-                    <TextBox Name="Third" TextWrapping="Wrap" Margin="0 10 0 0" MaxLength="29" TextChanged="text_box_LFSR_TextChanged"/>
-                    <Button Content="Start" MinHeight="30" MinWidth="100" Margin="0 10 0 0" HorizontalAlignment="Center"/>
+                    <TextBox Name="Second" TextWrapping="Wrap" MaxLength="27" TextChanged="text_box_LFSR_TextChanged"/>
+                    <TextBox Name="Third" TextWrapping="Wrap" Margin="0 10 0 0" MaxLength="37" TextChanged="text_box_LFSR_TextChanged"/>
+                    <Button Content="Start" MinHeight="30" MinWidth="100" Margin="0 10 0 0" HorizontalAlignment="Center" Click="Button_Click"/>
                 </StackPanel>
             </TabItem>
         </TabControl>

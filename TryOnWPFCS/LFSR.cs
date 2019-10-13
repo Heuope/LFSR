@@ -7,68 +7,82 @@ using System.Threading.Tasks;
 namespace TryOnWPFCS
 {
     static class LFSR
-    {
-        // x^29 + x^2 + 1   
-        public static byte[] Key;
-        public static byte[] InitialFile;
-        public static byte[] CipherFile;
+    {   
+        public static byte[] Key { get; set; }
+        public static byte[] InitialFile { get; set; }
+        public static byte[] CipherFile { get; set; }
+
         private const int BitInByte = 8;
 
-        public static void MainPoint(string _key, string _filePathLoad, string _filePathSave)
-        {
-            InitialFile = System.IO.File.ReadAllBytes(_filePathLoad);
-            KeyGenerator(_key);            
-            GenerateCipher();
+        public static void Start(string _key, string _loadFilePath)
+        {            
+            InitialFile = System.IO.File.ReadAllBytes(_loadFilePath);
+            Key =  KeyGenerator(_key, InitialFile.Length, new int[] { 27 });            
+            CipherFile = GenerateCipher(InitialFile, Key);            
+        }
+
+        public static void SaveFile(string _filePathSave)
+        {         
             System.IO.File.WriteAllBytes(_filePathSave, CipherFile);
         }
 
-        private static void KeyGenerator(string keyStream)
-        {        
+        public static byte[] KeyGenerator(string keyStream, Int64 sizeofInitialFile, int[] xorElements)
+        {            
             var _key = new List<byte>();
 
-            var _elementLFSR = new byte[keyStream.Length]; // LFSR element
+            if (keyStream.Length >= sizeofInitialFile * BitInByte)
+            {
+                for (int i = 0; i < sizeofInitialFile * BitInByte; i += BitInByte)
+                    _key.Add(Convert.ToByte(keyStream.Substring(i, BitInByte), 2));
 
-            // initialize element                        
+                return _key.ToArray();
+            }
+
+            var _elementLFSR = new List<byte>(); // LFSR element
+
+            // initialize element                                   
 
             for (int i = 0; i < keyStream.Length; i++)
-                _elementLFSR[i] = byte.Parse(keyStream[i].ToString());
+                _elementLFSR.Add(byte.Parse(keyStream[i].ToString()));
 
-            int _lastNumber;          
+            byte _lastNumber;          
             int z = 0; // counter bit in byte
             byte _byteInKey = 0;            
 
-            for (Int64 i = 0; i < InitialFile.Length * BitInByte; i++)
+            for (Int64 i = 0; i < sizeofInitialFile * BitInByte; i++)
             {                
                 _byteInKey = (byte)(_byteInKey << 1);
                 _byteInKey = (byte)(_byteInKey & 0b_1111_1110);
                 _byteInKey = (byte)(_byteInKey | _elementLFSR[0]);
 
                 z++;
-                if (z == 8)
+                if (z == BitInByte)
                 {
                     _key.Add(_byteInKey);                   
                     z = 0;
                 }
 
-                _lastNumber = _elementLFSR[0] ^ _elementLFSR[27];
+                _lastNumber = _elementLFSR[0];
 
-                for (int j = 0; j < _elementLFSR.Length - 1; j++)
-                    _elementLFSR[j] = _elementLFSR[j + 1];
+                foreach (var item in xorElements)
+                    _lastNumber = (byte)(_lastNumber ^ _elementLFSR[item]);
 
-                _elementLFSR[_elementLFSR.Length - 1] = (byte)_lastNumber;
+                _elementLFSR.RemoveAt(0);
+
+                _elementLFSR.Add(_lastNumber);
             }
 
-            Key = _key.ToArray();
+            return _key.ToArray();
         }      
 
-        static private void GenerateCipher()
+        public static byte[] GenerateCipher(byte[] _initialFile, byte[] _key)
         {
-            var _cipherFile = new byte[InitialFile.Length];
+            var _cipherFile = new byte[_initialFile.Length];
                        
-            for (int i = 0; i < InitialFile.Length; i++)
-                _cipherFile[i] = (byte)(InitialFile[i] ^ Key[i]);
+            for (int i = 0; i < _initialFile.Length; i++)
+                _cipherFile[i] = (byte)(_initialFile[i] ^ _key[i]);
 
-            CipherFile = _cipherFile;
+            return _cipherFile;
         }
     }
 }
