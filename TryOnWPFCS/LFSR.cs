@@ -3,11 +3,14 @@ using System.Collections.Generic;
 
 namespace TryOnWPFCS
 {
-    class LFSR
+    class LFSR : IFieldsCipher
     {   
         public byte[] Key { get; set; }
         public byte[] InitialFile { get; set; }
         public byte[] CipherFile { get; set; }
+        public byte[] FirstKey { get ; set ; }
+        public byte[] SecondKey { get; set; }
+        public byte[] ThirdKey { get; set; }
 
         private const int BitInByte = 8;
 

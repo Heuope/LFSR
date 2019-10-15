@@ -64,6 +64,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Geffe.cs" />
+    <Compile Include="IFieldsCipher.cs" />
     <Compile Include="LFSR.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

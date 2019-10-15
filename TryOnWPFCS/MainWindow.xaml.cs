@@ -15,7 +15,7 @@ namespace TryOnWPFCS
 
         public MainWindow()
         {
-            InitializeComponent();            
+            InitializeComponent();
         }
 
         private void text_box_LFSR_TextChanged(object sender, TextChangedEventArgs e)
@@ -54,7 +54,8 @@ namespace TryOnWPFCS
         private string GetBits(byte[] bytes)
         {
             string bits = "";
-
+            if (bytes == null)
+                return "";
             for (int i = 0; (i < MaxBytes) && (i < bytes.Length); i++)
             {
                 string temp = Convert.ToString(bytes[i], 2);
@@ -65,19 +66,22 @@ namespace TryOnWPFCS
 
             return bits;
         }
-
-        private void PrintBits(object obj)
-        {
-            var lfsr = (LFSR)obj;
-
-            InitialFileBits.Text = GetBits(lfsr.InitialFile);
-            KeyBits.Text = GetBits(lfsr.Key);
-            CipherFileBits.Text = GetBits(lfsr.CipherFile);
+    
+        private void PrintBits(IFieldsCipher obj)
+        {            
+            InitialFileBits.Text = GetBits(obj.InitialFile);
+            KeyBits.Text = GetBits(obj.Key);
+            CipherFileBits.Text = GetBits(obj.CipherFile);
+            First.Text = GetBits(obj.FirstKey);
+            Second.Text = GetBits(obj.SecondKey);
+            Third.Text = GetBits(obj.ThirdKey);
         }
 
         private void Button_Click_LFSR(object sender, RoutedEventArgs e)
         {
-            if ((SaveFilePath == null) || (LoadFilePath == null))
+            if ((SaveFilePath == null) ||
+                (LoadFilePath == null) ||
+                (LFSRKey.Text.Length != 29))
                 return;
 
             var lfsr = new LFSR();
@@ -90,7 +94,11 @@ namespace TryOnWPFCS
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if ((SaveFilePath == null) || (LoadFilePath == null))
+            if ((SaveFilePath == null) ||
+                (LoadFilePath == null) ||
+                (FirstKeyStream.Text.Length != 29) ||
+                (SecondKeyStream.Text.Length != 27) ||
+                (ThirdKeyStream.Text.Length != 37))
                 return;
 
             var geffe = new Geffe();

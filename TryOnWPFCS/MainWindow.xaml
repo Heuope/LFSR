@@ -17,11 +17,14 @@
             <RowDefinition/>
             <RowDefinition MaxHeight="230"/>
         </Grid.RowDefinitions>
-
         <InkCanvas Grid.Column="0"
                    Grid.Row="2"
                    Background="Azure"/>
-
+        
+        <TextBox Grid.Row="2"
+                 Grid.Column="2"
+                 FontSize="14"/>
+        
         <ToolBar Height="25"  Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3">
             <Button Content="Load"
                     Click="Load_Button_Click"/>
@@ -31,30 +34,68 @@
             <Button Content="Save"
                     Click="Save_Button_Click"/>
         </ToolBar>
-        
-        <GroupBox Grid.Row="1" Grid.Column="0" Header="Original File" FontSize="14">
-            <ScrollViewer>
-                <TextBlock x:Name="InitialFileBits"
+        <TabControl Grid.Row="1" Grid.Column="0">
+            <TabItem Header="1" MinWidth="50">
+                <GroupBox Header="Original File" FontSize="14">
+                    <ScrollViewer>
+                        <TextBlock x:Name="InitialFileBits"
+                           FontSize="18"
+                           TextWrapping="Wrap"/>
+                    </ScrollViewer>
+                </GroupBox>
+            </TabItem>
+            <TabItem Header="2" MinWidth="50">
+                <GroupBox Header="Original File" FontSize="14">
+                    <ScrollViewer>
+                        <TextBlock x:Name="First"
+                           FontSize="18"
+                           TextWrapping="Wrap"/>
+                    </ScrollViewer>
+                </GroupBox>
+            </TabItem>
+        </TabControl>
+        <TabControl Grid.Row="1" Grid.Column="1" >
+            <TabItem Header="1" MinWidth="50">
+                <GroupBox Header="Key" FontSize="14">
+                    <ScrollViewer>
+                        <TextBlock x:Name="KeyBits"
                            FontSize="14"
                            TextWrapping="Wrap"/>
-            </ScrollViewer>
-        </GroupBox>
-        
-        <GroupBox Grid.Row="1" Grid.Column="1" Header="Key" FontSize="14">
-            <ScrollViewer>
-                <TextBlock x:Name="KeyBits"
-                           FontSize="14"
+                    </ScrollViewer>
+                </GroupBox>
+            </TabItem>
+            <TabItem Header="2" MinWidth="50">
+                <GroupBox Header="Key" FontSize="18">
+                    <ScrollViewer>
+                        <TextBlock x:Name="Second"
+                           FontSize="18"
                            TextWrapping="Wrap"/>
-            </ScrollViewer>
-        </GroupBox>
-        
-        <GroupBox Grid.Row="1" Grid.Column="2" Header="Cipher File" FontSize="14">
-            <ScrollViewer>
-                <TextBlock x:Name="CipherFileBits"
-                           FontSize="14"
+                    </ScrollViewer>
+                </GroupBox>
+            </TabItem>
+        </TabControl>
+
+        <TabControl Grid.Row="1" Grid.Column="2">
+            <TabItem Header="1" MinWidth="50">
+                <GroupBox Header="Cipher File" FontSize="14">
+                    <ScrollViewer>
+                        <TextBlock x:Name="CipherFileBits"
+                           FontSize="18"
                            TextWrapping="Wrap"/>
-            </ScrollViewer>
-        </GroupBox>
+                    </ScrollViewer>
+                </GroupBox>
+            </TabItem>
+            <TabItem Header="2" MinWidth="50">
+                <GroupBox Header="Cipher File" FontSize="14">
+                    <ScrollViewer>
+                        <TextBlock x:Name="Third"
+                           FontSize="18"
+                           TextWrapping="Wrap"/>
+                    </ScrollViewer>
+                </GroupBox>
+            </TabItem>
+        </TabControl>
+        
 
         <TabControl Grid.Row="2" Grid.Column="1" FontSize="14">
             <TabItem Header="LFSR" MinWidth="60">

@@ -12,11 +12,11 @@ namespace TryOnWPFCS
         {                  
             InitialFile = System.IO.File.ReadAllBytes(loadFilePath);
 
-            byte[] firstKey = KeyGenerator(firstKeyStream, InitialFile.Length, new int[] { 27 });
-            byte[] secondKey = KeyGenerator(secondKeyStream, InitialFile.Length, new int[] { 26, 19, 20 });
-            byte[] thirdKey = KeyGenerator(thirdKeyStream, InitialFile.Length, new int[] { 25, 27, 35 });
+            FirstKey = KeyGenerator(firstKeyStream, InitialFile.Length, new int[] { 27 });            
+            SecondKey = KeyGenerator(secondKeyStream, InitialFile.Length, new int[] { 26, 19, 20 });            
+            ThirdKey = KeyGenerator(thirdKeyStream, InitialFile.Length, new int[] { 25, 27, 35 });     
 
-            Key = KeyGenerator(firstKey, secondKey, thirdKey);
+            Key = KeyGenerator(FirstKey, SecondKey, ThirdKey);
 
             CipherFile = GenerateCipher(InitialFile, Key);
         }       
