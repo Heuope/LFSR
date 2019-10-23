@@ -1,9 +1,4 @@
-﻿<Application x:Class="TryOnWPFCS.App"
+﻿<Application x:Class="TryOnWpfCs.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:TryOnWPFCS"
-             StartupUri="MainWindow.xaml">
-    <Application.Resources>
-         
-    </Application.Resources>
-</Application>
+             StartupUri="MainWindow.xaml" x:ClassModifier="internal" />

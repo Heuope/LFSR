@@ -1,111 +1,88 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace TryOnWPFCS
+namespace TryOnWpfCs
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    internal partial class MainWindow
     {
-        private string LoadFilePath;
-        private string SaveFilePath;
+        private string _loadFilePath = string.Empty;
+        private string _saveFilePath = string.Empty;
         private const int MaxBytes = 200;
 
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
+        public MainWindow() => InitializeComponent();
 
         private void text_box_LFSR_TextChanged(object sender, TextChangedEventArgs e)
-        {            
-            var textBox = (TextBox)sender;
-            string str = "";
-            int caretIndex = textBox.CaretIndex;
-
-            foreach (char item in textBox.Text)
-                if (item == '1' || item == '0')
-                    str += item;
-
-            textBox.Text = str;
+        {
+            var textBox = (TextBox) sender;
+            var caretIndex = textBox.CaretIndex;
+            textBox.Text = string.Concat(textBox.Text.Where(x => x == '1' || x == '0'));
             textBox.CaretIndex = caretIndex;
         }
+
         private void Load_Button_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new Microsoft.Win32.OpenFileDialog();          
-
-            Nullable<bool> result = dialog.ShowDialog();
+            var dialog = new Microsoft.Win32.OpenFileDialog();
+            var result = dialog.ShowDialog();
 
             if (result == true)
-                LoadFilePath = dialog.FileName;
+            {
+                _loadFilePath = dialog.FileName;
+            }
         }
 
         private void Save_Button_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new Microsoft.Win32.SaveFileDialog();            
-
-            Nullable<bool> result = dialog.ShowDialog();
+            var dialog = new Microsoft.Win32.SaveFileDialog();
+            var result = dialog.ShowDialog();
 
             if (result == true)
-                SaveFilePath = dialog.FileName;
-        }
-
-        private string GetBits(byte[] bytes)
-        {
-            string bits = "";
-            if (bytes == null)
-                return "";
-            for (int i = 0; (i < MaxBytes) && (i < bytes.Length); i++)
             {
-                string temp = Convert.ToString(bytes[i], 2);
-                while (temp.Length < 8)
-                    temp = '0' + temp;
-                bits += temp;
+                _saveFilePath = dialog.FileName;
             }
-
-            return bits;
         }
-    
-        private void PrintBits(IFieldsCipher obj)
-        {            
-            InitialFileBits.Text = GetBits(obj.InitialFile);
-            KeyBits.Text = GetBits(obj.Key);
-            CipherFileBits.Text = GetBits(obj.CipherFile);
-            First.Text = GetBits(obj.FirstKey);
-            Second.Text = GetBits(obj.SecondKey);
-            Third.Text = GetBits(obj.ThirdKey);
+
+        private static string GetBits(IEnumerable<byte> bytes) =>
+            string.Concat(
+                bytes
+                    .Take(MaxBytes)
+                    .Select(x => Convert.ToString(x, 2).PadLeft(8, '0')));
+
+        private void PrintBits(IFieldsCipher cipher)
+        {
+            InitialFileBits.Text = GetBits(cipher.InitialFile);
+            KeyBits.Text = GetBits(cipher.Key);
+            CipherFileBits.Text = GetBits(cipher.CipherFile);
+
+            if (!(cipher is IGeffe geffe)) return;
+
+            First.Text = GetBits(geffe.FirstKey);
+            Second.Text = GetBits(geffe.SecondKey);
+            Third.Text = GetBits(geffe.ThirdKey);
         }
 
         private void Button_Click_LFSR(object sender, RoutedEventArgs e)
         {
-            if ((SaveFilePath == null) ||
-                (LoadFilePath == null) ||
-                (LFSRKey.Text.Length != 29))
+            if (string.IsNullOrWhiteSpace(_saveFilePath) || string.IsNullOrWhiteSpace(_loadFilePath) || LFSRKey.Text.Length != 29)
                 return;
 
-            var lfsr = new LFSR();
-
-            lfsr.Start(LFSRKey.Text, LoadFilePath);
-            lfsr.SaveFile(SaveFilePath);
-
-            PrintBits(lfsr);          
-        }        
+            var lfsr = Lfsr.Create(LFSRKey.Text, _loadFilePath, _saveFilePath);
+            PrintBits(lfsr);
+        }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if ((SaveFilePath == null) ||
-                (LoadFilePath == null) ||
-                (FirstKeyStream.Text.Length != 29) ||
-                (SecondKeyStream.Text.Length != 27) ||
-                (ThirdKeyStream.Text.Length != 37))
+            if (string.IsNullOrWhiteSpace(_saveFilePath) ||
+                string.IsNullOrWhiteSpace(_loadFilePath) ||
+                FirstKeyStream.Text.Length != 29 ||
+                SecondKeyStream.Text.Length != 27 ||
+                ThirdKeyStream.Text.Length != 37)
                 return;
 
-            var geffe = new Geffe();
-            geffe.Start(FirstKeyStream.Text, SecondKeyStream.Text, ThirdKeyStream.Text, LoadFilePath);
-            geffe.SaveFile(SaveFilePath);
-
+            var geffe = Geffe.Create(FirstKeyStream.Text, SecondKeyStream.Text, ThirdKeyStream.Text, _loadFilePath, _saveFilePath);
             PrintBits(geffe);
-        }       
+        }
     }
 }

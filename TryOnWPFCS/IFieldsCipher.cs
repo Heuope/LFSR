@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TryOnWPFCS
+﻿namespace TryOnWpfCs
 {
-    interface IFieldsCipher
+    internal interface IFieldsCipher
     {
-        byte[] Key { get; set; }
-        byte[] InitialFile { get; set; }
-        byte[] CipherFile { get; set; }
-        byte[] FirstKey { get; set; }
-        byte[] SecondKey { get; set; }
-        byte[] ThirdKey { get; set; }
+        byte[] Key { get; }
+        byte[] InitialFile { get; }
+        byte[] CipherFile { get; }
+    }
+
+    internal interface IGeffe : IFieldsCipher
+    {
+        byte[] FirstKey { get; }
+        byte[] SecondKey { get; }
+        byte[] ThirdKey { get; }
     }
 }

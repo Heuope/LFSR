@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TryOnWPFCS.Properties
+namespace TryOnWpfCs.Properties
 {
 
 
